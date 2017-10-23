@@ -1,0 +1,1435 @@
+char const* const cunn_ptx =
+" \n \
+.version 5.0 \n \
+.target sm_30 \n \
+.address_size 64 \n \
+ \n \
+	// .globl	identity_activation \n \
+ \n \
+.visible .entry identity_activation( \n \
+	.param .u64 identity_activation_param_0, \n \
+	.param .u64 identity_activation_param_1, \n \
+	.param .u64 identity_activation_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<2>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [identity_activation_param_0]; \n \
+	ld.param.u64 	%rd5, [identity_activation_param_1]; \n \
+	ld.param.u64 	%rd3, [identity_activation_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB0_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f1; \n \
+ \n \
+BB0_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	identity_derivative \n \
+.visible .entry identity_derivative( \n \
+	.param .u64 identity_derivative_param_0, \n \
+	.param .u64 identity_derivative_param_1, \n \
+	.param .u64 identity_derivative_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .b32 	%r<6>; \n \
+	.reg .b64 	%rd<12>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd3, [identity_derivative_param_0]; \n \
+	ld.param.u64 	%rd4, [identity_derivative_param_1]; \n \
+	ld.param.u64 	%rd2, [identity_derivative_param_2]; \n \
+	cvta.to.global.u64 	%rd5, %rd4; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd6, %rd3; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd6, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd5; \n \
+	@%p1 bra 	BB1_2; \n \
+ \n \
+	cvta.to.global.u64 	%rd9, %rd2; \n \
+	shl.b64 	%rd10, %rd1, 2; \n \
+	add.s64 	%rd11, %rd9, %rd10; \n \
+	mov.u32 	%r5, 1065353216; \n \
+	st.global.u32 	[%rd11], %r5; \n \
+ \n \
+BB1_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	logistic_activation \n \
+.visible .entry logistic_activation( \n \
+	.param .u64 logistic_activation_param_0, \n \
+	.param .u64 logistic_activation_param_1, \n \
+	.param .u64 logistic_activation_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<6>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [logistic_activation_param_0]; \n \
+	ld.param.u64 	%rd5, [logistic_activation_param_1]; \n \
+	ld.param.u64 	%rd3, [logistic_activation_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB2_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	mul.ftz.f32 	%f2, %f1, 0fBFB8AA3B; \n \
+	ex2.approx.ftz.f32 	%f3, %f2; \n \
+	add.ftz.f32 	%f4, %f3, 0f3F800000; \n \
+	rcp.approx.ftz.f32 	%f5, %f4; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f5; \n \
+ \n \
+BB2_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	logistic_derivative \n \
+.visible .entry logistic_derivative( \n \
+	.param .u64 logistic_derivative_param_0, \n \
+	.param .u64 logistic_derivative_param_1, \n \
+	.param .u64 logistic_derivative_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<8>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [logistic_derivative_param_0]; \n \
+	ld.param.u64 	%rd5, [logistic_derivative_param_1]; \n \
+	ld.param.u64 	%rd3, [logistic_derivative_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB3_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	mul.ftz.f32 	%f2, %f1, 0fBFB8AA3B; \n \
+	ex2.approx.ftz.f32 	%f3, %f2; \n \
+	add.ftz.f32 	%f4, %f3, 0f3F800000; \n \
+	rcp.approx.ftz.f32 	%f5, %f4; \n \
+	mul.ftz.f32 	%f6, %f5, %f5; \n \
+	sub.ftz.f32 	%f7, %f5, %f6; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f7; \n \
+ \n \
+BB3_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	tanh_activation \n \
+.visible .entry tanh_activation( \n \
+	.param .u64 tanh_activation_param_0, \n \
+	.param .u64 tanh_activation_param_1, \n \
+	.param .u64 tanh_activation_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<5>; \n \
+	.reg .f32 	%f<33>; \n \
+	.reg .b32 	%r<10>; \n \
+	.reg .b64 	%rd<14>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [tanh_activation_param_0]; \n \
+	ld.param.u64 	%rd5, [tanh_activation_param_1]; \n \
+	ld.param.u64 	%rd3, [tanh_activation_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB4_5; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	abs.ftz.f32 	%f2, %f1; \n \
+	setp.ltu.ftz.f32	%p2, %f2, 0f3F0CCCCD; \n \
+	@%p2 bra 	BB4_3; \n \
+	bra.uni 	BB4_2; \n \
+ \n \
+BB4_3: \n \
+	mul.ftz.f32 	%f21, %f1, %f1; \n \
+	mov.f32 	%f22, 0fBD57BE66; \n \
+	mov.f32 	%f23, 0f3C86A81B; \n \
+	fma.rn.ftz.f32 	%f24, %f23, %f21, %f22; \n \
+	mov.f32 	%f25, 0f3E08677B; \n \
+	fma.rn.ftz.f32 	%f26, %f24, %f21, %f25; \n \
+	mov.f32 	%f27, 0fBEAAAA29; \n \
+	fma.rn.ftz.f32 	%f28, %f26, %f21, %f27; \n \
+	mul.ftz.f32 	%f29, %f21, %f28; \n \
+	fma.rn.ftz.f32 	%f30, %f29, %f1, %f1; \n \
+	add.ftz.f32 	%f31, %f1, %f1; \n \
+	setp.eq.ftz.f32	%p4, %f1, 0f00000000; \n \
+	selp.f32	%f32, %f31, %f30, %p4; \n \
+	bra.uni 	BB4_4; \n \
+ \n \
+BB4_2: \n \
+	add.ftz.f32 	%f10, %f2, %f2; \n \
+	mul.ftz.f32 	%f11, %f10, 0f3FB8AA3B; \n \
+	cvt.rzi.ftz.f32.f32	%f12, %f11; \n \
+	mov.f32 	%f13, 0fBF317200; \n \
+	fma.rn.ftz.f32 	%f14, %f12, %f13, %f10; \n \
+	mov.f32 	%f15, 0fB5BFBE8E; \n \
+	fma.rn.ftz.f32 	%f16, %f12, %f15, %f14; \n \
+	mul.ftz.f32 	%f7, %f16, 0f3FB8AA3B; \n \
+	// inline asm \n \
+	ex2.approx.ftz.f32 %f6,%f7; \n \
+	// inline asm \n \
+	ex2.approx.ftz.f32 	%f17, %f12; \n \
+	mov.f32 	%f18, 0f3F800000; \n \
+	fma.rn.ftz.f32 	%f9, %f6, %f17, %f18; \n \
+	// inline asm \n \
+	rcp.approx.ftz.f32 %f8,%f9; \n \
+	// inline asm \n \
+	mov.f32 	%f19, 0fC0000000; \n \
+	fma.rn.ftz.f32 	%f20, %f8, %f19, %f18; \n \
+	mov.b32 	 %r5, %f20; \n \
+	setp.ltu.ftz.f32	%p3, %f2, 0f42B00000; \n \
+	selp.b32	%r6, %r5, 1065353216, %p3; \n \
+	mov.b32 	 %r7, %f1; \n \
+	and.b32  	%r8, %r7, -2147483648; \n \
+	or.b32  	%r9, %r6, %r8; \n \
+	mov.b32 	 %f32, %r9; \n \
+ \n \
+BB4_4: \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	add.s64 	%rd13, %rd11, %rd9; \n \
+	st.global.f32 	[%rd13], %f32; \n \
+ \n \
+BB4_5: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	tanh_derivative \n \
+.visible .entry tanh_derivative( \n \
+	.param .u64 tanh_derivative_param_0, \n \
+	.param .u64 tanh_derivative_param_1, \n \
+	.param .u64 tanh_derivative_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<5>; \n \
+	.reg .f32 	%f<36>; \n \
+	.reg .b32 	%r<10>; \n \
+	.reg .b64 	%rd<14>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [tanh_derivative_param_0]; \n \
+	ld.param.u64 	%rd5, [tanh_derivative_param_1]; \n \
+	ld.param.u64 	%rd3, [tanh_derivative_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB5_5; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	abs.ftz.f32 	%f2, %f1; \n \
+	setp.ltu.ftz.f32	%p2, %f2, 0f3F0CCCCD; \n \
+	@%p2 bra 	BB5_3; \n \
+	bra.uni 	BB5_2; \n \
+ \n \
+BB5_3: \n \
+	mul.ftz.f32 	%f21, %f1, %f1; \n \
+	mov.f32 	%f22, 0fBD57BE66; \n \
+	mov.f32 	%f23, 0f3C86A81B; \n \
+	fma.rn.ftz.f32 	%f24, %f23, %f21, %f22; \n \
+	mov.f32 	%f25, 0f3E08677B; \n \
+	fma.rn.ftz.f32 	%f26, %f24, %f21, %f25; \n \
+	mov.f32 	%f27, 0fBEAAAA29; \n \
+	fma.rn.ftz.f32 	%f28, %f26, %f21, %f27; \n \
+	mul.ftz.f32 	%f29, %f21, %f28; \n \
+	fma.rn.ftz.f32 	%f30, %f29, %f1, %f1; \n \
+	add.ftz.f32 	%f31, %f1, %f1; \n \
+	setp.eq.ftz.f32	%p4, %f1, 0f00000000; \n \
+	selp.f32	%f35, %f31, %f30, %p4; \n \
+	bra.uni 	BB5_4; \n \
+ \n \
+BB5_2: \n \
+	add.ftz.f32 	%f10, %f2, %f2; \n \
+	mul.ftz.f32 	%f11, %f10, 0f3FB8AA3B; \n \
+	cvt.rzi.ftz.f32.f32	%f12, %f11; \n \
+	mov.f32 	%f13, 0fBF317200; \n \
+	fma.rn.ftz.f32 	%f14, %f12, %f13, %f10; \n \
+	mov.f32 	%f15, 0fB5BFBE8E; \n \
+	fma.rn.ftz.f32 	%f16, %f12, %f15, %f14; \n \
+	mul.ftz.f32 	%f7, %f16, 0f3FB8AA3B; \n \
+	// inline asm \n \
+	ex2.approx.ftz.f32 %f6,%f7; \n \
+	// inline asm \n \
+	ex2.approx.ftz.f32 	%f17, %f12; \n \
+	mov.f32 	%f18, 0f3F800000; \n \
+	fma.rn.ftz.f32 	%f9, %f6, %f17, %f18; \n \
+	// inline asm \n \
+	rcp.approx.ftz.f32 %f8,%f9; \n \
+	// inline asm \n \
+	mov.f32 	%f19, 0fC0000000; \n \
+	fma.rn.ftz.f32 	%f20, %f8, %f19, %f18; \n \
+	mov.b32 	 %r5, %f20; \n \
+	setp.ltu.ftz.f32	%p3, %f2, 0f42B00000; \n \
+	selp.b32	%r6, %r5, 1065353216, %p3; \n \
+	mov.b32 	 %r7, %f1; \n \
+	and.b32  	%r8, %r7, -2147483648; \n \
+	or.b32  	%r9, %r6, %r8; \n \
+	mov.b32 	 %f35, %r9; \n \
+ \n \
+BB5_4: \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	mul.ftz.f32 	%f32, %f35, %f35; \n \
+	mov.f32 	%f33, 0f3F800000; \n \
+	sub.ftz.f32 	%f34, %f33, %f32; \n \
+	add.s64 	%rd13, %rd11, %rd9; \n \
+	st.global.f32 	[%rd13], %f34; \n \
+ \n \
+BB5_5: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	arctan_activation \n \
+.visible .entry arctan_activation( \n \
+	.param .u64 arctan_activation_param_0, \n \
+	.param .u64 arctan_activation_param_1, \n \
+	.param .u64 arctan_activation_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<5>; \n \
+	.reg .f32 	%f<26>; \n \
+	.reg .b32 	%r<9>; \n \
+	.reg .b64 	%rd<14>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [arctan_activation_param_0]; \n \
+	ld.param.u64 	%rd5, [arctan_activation_param_1]; \n \
+	ld.param.u64 	%rd3, [arctan_activation_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB6_4; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	abs.ftz.f32 	%f2, %f1; \n \
+	setp.leu.ftz.f32	%p2, %f2, 0f3F800000; \n \
+	mov.f32 	%f25, %f2; \n \
+	@%p2 bra 	BB6_3; \n \
+ \n \
+	rcp.approx.ftz.f32 	%f3, %f2; \n \
+	mov.f32 	%f25, %f3; \n \
+ \n \
+BB6_3: \n \
+	mov.f32 	%f4, %f25; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	mul.rn.ftz.f32 	%f5, %f4, %f4; \n \
+	mov.f32 	%f6, 0fC0B59883; \n \
+	mov.f32 	%f7, 0fBF52C7EA; \n \
+	fma.rn.ftz.f32 	%f8, %f5, %f7, %f6; \n \
+	mov.f32 	%f9, 0fC0D21907; \n \
+	fma.rn.ftz.f32 	%f10, %f8, %f5, %f9; \n \
+	mul.ftz.f32 	%f11, %f5, %f10; \n \
+	mul.ftz.f32 	%f12, %f4, %f11; \n \
+	add.ftz.f32 	%f13, %f5, 0f41355DC0; \n \
+	mov.f32 	%f14, 0f41E6BD60; \n \
+	fma.rn.ftz.f32 	%f15, %f13, %f5, %f14; \n \
+	mov.f32 	%f16, 0f419D92C8; \n \
+	fma.rn.ftz.f32 	%f17, %f15, %f5, %f16; \n \
+	rcp.approx.ftz.f32 	%f18, %f17; \n \
+	fma.rn.ftz.f32 	%f19, %f12, %f18, %f4; \n \
+	mov.f32 	%f20, 0f3FC90FDB; \n \
+	sub.ftz.f32 	%f21, %f20, %f19; \n \
+	setp.gt.ftz.f32	%p3, %f2, 0f3F800000; \n \
+	selp.f32	%f22, %f21, %f19, %p3; \n \
+	mov.b32 	 %r5, %f22; \n \
+	mov.b32 	 %r6, %f1; \n \
+	and.b32  	%r7, %r6, -2147483648; \n \
+	or.b32  	%r8, %r5, %r7; \n \
+	mov.b32 	 %f23, %r8; \n \
+	setp.gtu.ftz.f32	%p4, %f2, 0f7F800000; \n \
+	selp.f32	%f24, %f22, %f23, %p4; \n \
+	add.s64 	%rd13, %rd11, %rd9; \n \
+	st.global.f32 	[%rd13], %f24; \n \
+ \n \
+BB6_4: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	arctan_derivative \n \
+.visible .entry arctan_derivative( \n \
+	.param .u64 arctan_derivative_param_0, \n \
+	.param .u64 arctan_derivative_param_1, \n \
+	.param .u64 arctan_derivative_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<4>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [arctan_derivative_param_0]; \n \
+	ld.param.u64 	%rd5, [arctan_derivative_param_1]; \n \
+	ld.param.u64 	%rd3, [arctan_derivative_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB7_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	fma.rn.ftz.f32 	%f2, %f1, %f1, 0f3F800000; \n \
+	rcp.approx.ftz.f32 	%f3, %f2; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f3; \n \
+ \n \
+BB7_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	softsign_activation \n \
+.visible .entry softsign_activation( \n \
+	.param .u64 softsign_activation_param_0, \n \
+	.param .u64 softsign_activation_param_1, \n \
+	.param .u64 softsign_activation_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<5>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [softsign_activation_param_0]; \n \
+	ld.param.u64 	%rd5, [softsign_activation_param_1]; \n \
+	ld.param.u64 	%rd3, [softsign_activation_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB8_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	abs.ftz.f32 	%f2, %f1; \n \
+	add.ftz.f32 	%f3, %f2, 0f3F800000; \n \
+	div.approx.ftz.f32 	%f4, %f1, %f3; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f4; \n \
+ \n \
+BB8_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	softsign_derivative \n \
+.visible .entry softsign_derivative( \n \
+	.param .u64 softsign_derivative_param_0, \n \
+	.param .u64 softsign_derivative_param_1, \n \
+	.param .u64 softsign_derivative_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<4>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [softsign_derivative_param_0]; \n \
+	ld.param.u64 	%rd5, [softsign_derivative_param_1]; \n \
+	ld.param.u64 	%rd3, [softsign_derivative_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB9_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	fma.rn.ftz.f32 	%f2, %f1, %f1, 0f3F800000; \n \
+	rcp.approx.ftz.f32 	%f3, %f2; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f3; \n \
+ \n \
+BB9_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	relu_activation \n \
+.visible .entry relu_activation( \n \
+	.param .u64 relu_activation_param_0, \n \
+	.param .u64 relu_activation_param_1, \n \
+	.param .u64 relu_activation_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<3>; \n \
+	.reg .f32 	%f<3>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [relu_activation_param_0]; \n \
+	ld.param.u64 	%rd5, [relu_activation_param_1]; \n \
+	ld.param.u64 	%rd3, [relu_activation_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB10_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	setp.lt.ftz.f32	%p2, %f1, 0f00000000; \n \
+	selp.f32	%f2, 0f00000000, %f1, %p2; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f2; \n \
+ \n \
+BB10_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	relu_derivative \n \
+.visible .entry relu_derivative( \n \
+	.param .u64 relu_derivative_param_0, \n \
+	.param .u64 relu_derivative_param_1, \n \
+	.param .u64 relu_derivative_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<3>; \n \
+	.reg .f32 	%f<3>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [relu_derivative_param_0]; \n \
+	ld.param.u64 	%rd5, [relu_derivative_param_1]; \n \
+	ld.param.u64 	%rd3, [relu_derivative_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB11_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	setp.lt.ftz.f32	%p2, %f1, 0f00000000; \n \
+	selp.f32	%f2, 0f00000000, 0f3F800000, %p2; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f2; \n \
+ \n \
+BB11_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	leaky_relu_activation \n \
+.visible .entry leaky_relu_activation( \n \
+	.param .u64 leaky_relu_activation_param_0, \n \
+	.param .u64 leaky_relu_activation_param_1, \n \
+	.param .u64 leaky_relu_activation_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<3>; \n \
+	.reg .f32 	%f<4>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [leaky_relu_activation_param_0]; \n \
+	ld.param.u64 	%rd5, [leaky_relu_activation_param_1]; \n \
+	ld.param.u64 	%rd3, [leaky_relu_activation_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB12_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	setp.lt.ftz.f32	%p2, %f1, 0f00000000; \n \
+	mul.ftz.f32 	%f2, %f1, 0f3C23D70A; \n \
+	selp.f32	%f3, %f2, %f1, %p2; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f3; \n \
+ \n \
+BB12_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	leaky_relu_derivative \n \
+.visible .entry leaky_relu_derivative( \n \
+	.param .u64 leaky_relu_derivative_param_0, \n \
+	.param .u64 leaky_relu_derivative_param_1, \n \
+	.param .u64 leaky_relu_derivative_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<3>; \n \
+	.reg .f32 	%f<3>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [leaky_relu_derivative_param_0]; \n \
+	ld.param.u64 	%rd5, [leaky_relu_derivative_param_1]; \n \
+	ld.param.u64 	%rd3, [leaky_relu_derivative_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB13_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	setp.lt.ftz.f32	%p2, %f1, 0f00000000; \n \
+	selp.f32	%f2, 0f3C23D70A, 0f3F800000, %p2; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f2; \n \
+ \n \
+BB13_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	softplus_activation \n \
+.visible .entry softplus_activation( \n \
+	.param .u64 softplus_activation_param_0, \n \
+	.param .u64 softplus_activation_param_1, \n \
+	.param .u64 softplus_activation_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<7>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [softplus_activation_param_0]; \n \
+	ld.param.u64 	%rd5, [softplus_activation_param_1]; \n \
+	ld.param.u64 	%rd3, [softplus_activation_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB14_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	mul.ftz.f32 	%f2, %f1, 0f3FB8AA3B; \n \
+	ex2.approx.ftz.f32 	%f3, %f2; \n \
+	add.ftz.f32 	%f4, %f3, 0f3F800000; \n \
+	lg2.approx.ftz.f32 	%f5, %f4; \n \
+	mul.ftz.f32 	%f6, %f5, 0f3F317218; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f6; \n \
+ \n \
+BB14_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	softplus_derivative \n \
+.visible .entry softplus_derivative( \n \
+	.param .u64 softplus_derivative_param_0, \n \
+	.param .u64 softplus_derivative_param_1, \n \
+	.param .u64 softplus_derivative_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<6>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [softplus_derivative_param_0]; \n \
+	ld.param.u64 	%rd5, [softplus_derivative_param_1]; \n \
+	ld.param.u64 	%rd3, [softplus_derivative_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB15_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	mul.ftz.f32 	%f2, %f1, 0fBFB8AA3B; \n \
+	ex2.approx.ftz.f32 	%f3, %f2; \n \
+	add.ftz.f32 	%f4, %f3, 0f3F800000; \n \
+	rcp.approx.ftz.f32 	%f5, %f4; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f5; \n \
+ \n \
+BB15_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	bent_identity_activation \n \
+.visible .entry bent_identity_activation( \n \
+	.param .u64 bent_identity_activation_param_0, \n \
+	.param .u64 bent_identity_activation_param_1, \n \
+	.param .u64 bent_identity_activation_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<8>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [bent_identity_activation_param_0]; \n \
+	ld.param.u64 	%rd5, [bent_identity_activation_param_1]; \n \
+	ld.param.u64 	%rd3, [bent_identity_activation_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB16_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	fma.rn.ftz.f32 	%f2, %f1, %f1, 0f3F800000; \n \
+	sqrt.approx.ftz.f32 	%f3, %f2; \n \
+	mov.f32 	%f4, 0f40000000; \n \
+	div.approx.ftz.f32 	%f5, %f3, %f4; \n \
+	add.ftz.f32 	%f6, %f5, 0fBF000000; \n \
+	add.ftz.f32 	%f7, %f1, %f6; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f7; \n \
+ \n \
+BB16_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	bent_identity_derivative \n \
+.visible .entry bent_identity_derivative( \n \
+	.param .u64 bent_identity_derivative_param_0, \n \
+	.param .u64 bent_identity_derivative_param_1, \n \
+	.param .u64 bent_identity_derivative_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<7>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [bent_identity_derivative_param_0]; \n \
+	ld.param.u64 	%rd5, [bent_identity_derivative_param_1]; \n \
+	ld.param.u64 	%rd3, [bent_identity_derivative_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB17_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	mul.ftz.f32 	%f2, %f1, 0f3F000000; \n \
+	fma.rn.ftz.f32 	%f3, %f1, %f1, 0f3F800000; \n \
+	sqrt.approx.ftz.f32 	%f4, %f3; \n \
+	div.approx.ftz.f32 	%f5, %f2, %f4; \n \
+	add.ftz.f32 	%f6, %f5, 0f3F800000; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f6; \n \
+ \n \
+BB17_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	sinusoid_activation \n \
+.visible .entry sinusoid_activation( \n \
+	.param .u64 sinusoid_activation_param_0, \n \
+	.param .u64 sinusoid_activation_param_1, \n \
+	.param .u64 sinusoid_activation_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<3>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [sinusoid_activation_param_0]; \n \
+	ld.param.u64 	%rd5, [sinusoid_activation_param_1]; \n \
+	ld.param.u64 	%rd3, [sinusoid_activation_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB18_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	sin.approx.ftz.f32 	%f2, %f1; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f2; \n \
+ \n \
+BB18_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	sinusoid_derivative \n \
+.visible .entry sinusoid_derivative( \n \
+	.param .u64 sinusoid_derivative_param_0, \n \
+	.param .u64 sinusoid_derivative_param_1, \n \
+	.param .u64 sinusoid_derivative_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<3>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [sinusoid_derivative_param_0]; \n \
+	ld.param.u64 	%rd5, [sinusoid_derivative_param_1]; \n \
+	ld.param.u64 	%rd3, [sinusoid_derivative_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB19_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	cos.approx.ftz.f32 	%f2, %f1; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f2; \n \
+ \n \
+BB19_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	sinc_activation \n \
+.visible .entry sinc_activation( \n \
+	.param .u64 sinc_activation_param_0, \n \
+	.param .u64 sinc_activation_param_1, \n \
+	.param .u64 sinc_activation_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<3>; \n \
+	.reg .f32 	%f<7>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<14>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [sinc_activation_param_0]; \n \
+	ld.param.u64 	%rd5, [sinc_activation_param_1]; \n \
+	ld.param.u64 	%rd3, [sinc_activation_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB20_4; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	setp.eq.ftz.f32	%p2, %f1, 0f00000000; \n \
+	mov.f32 	%f6, 0f3F800000; \n \
+	@%p2 bra 	BB20_3; \n \
+ \n \
+	sin.approx.ftz.f32 	%f5, %f1; \n \
+	div.approx.ftz.f32 	%f6, %f5, %f1; \n \
+ \n \
+BB20_3: \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	add.s64 	%rd13, %rd11, %rd9; \n \
+	st.global.f32 	[%rd13], %f6; \n \
+ \n \
+BB20_4: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	sinc_derivative \n \
+.visible .entry sinc_derivative( \n \
+	.param .u64 sinc_derivative_param_0, \n \
+	.param .u64 sinc_derivative_param_1, \n \
+	.param .u64 sinc_derivative_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<3>; \n \
+	.reg .f32 	%f<11>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<14>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [sinc_derivative_param_0]; \n \
+	ld.param.u64 	%rd5, [sinc_derivative_param_1]; \n \
+	ld.param.u64 	%rd3, [sinc_derivative_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB21_4; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	setp.eq.ftz.f32	%p2, %f1, 0f00000000; \n \
+	mov.f32 	%f10, 0f00000000; \n \
+	@%p2 bra 	BB21_3; \n \
+ \n \
+	cos.approx.ftz.f32 	%f5, %f1; \n \
+	mul.ftz.f32 	%f6, %f1, %f5; \n \
+	sin.approx.ftz.f32 	%f7, %f1; \n \
+	sub.ftz.f32 	%f8, %f6, %f7; \n \
+	mul.ftz.f32 	%f9, %f1, %f1; \n \
+	div.approx.ftz.f32 	%f10, %f8, %f9; \n \
+ \n \
+BB21_3: \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	add.s64 	%rd13, %rd11, %rd9; \n \
+	st.global.f32 	[%rd13], %f10; \n \
+ \n \
+BB21_4: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	gaussian_activation \n \
+.visible .entry gaussian_activation( \n \
+	.param .u64 gaussian_activation_param_0, \n \
+	.param .u64 gaussian_activation_param_1, \n \
+	.param .u64 gaussian_activation_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<5>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [gaussian_activation_param_0]; \n \
+	ld.param.u64 	%rd5, [gaussian_activation_param_1]; \n \
+	ld.param.u64 	%rd3, [gaussian_activation_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB22_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	mul.ftz.f32 	%f2, %f1, %f1; \n \
+	mul.ftz.f32 	%f3, %f2, 0fBFB8AA3B; \n \
+	ex2.approx.ftz.f32 	%f4, %f3; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f4; \n \
+ \n \
+BB22_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	gaussian_derivative \n \
+.visible .entry gaussian_derivative( \n \
+	.param .u64 gaussian_derivative_param_0, \n \
+	.param .u64 gaussian_derivative_param_1, \n \
+	.param .u64 gaussian_derivative_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<7>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [gaussian_derivative_param_0]; \n \
+	ld.param.u64 	%rd5, [gaussian_derivative_param_1]; \n \
+	ld.param.u64 	%rd3, [gaussian_derivative_param_2]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB23_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	ld.global.f32 	%f1, [%rd10]; \n \
+	mul.ftz.f32 	%f2, %f1, 0fC0000000; \n \
+	mul.ftz.f32 	%f3, %f1, %f1; \n \
+	mul.ftz.f32 	%f4, %f3, 0fBFB8AA3B; \n \
+	ex2.approx.ftz.f32 	%f5, %f4; \n \
+	mul.ftz.f32 	%f6, %f2, %f5; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	st.global.f32 	[%rd12], %f6; \n \
+ \n \
+BB23_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	rescale_weight \n \
+.visible .entry rescale_weight( \n \
+	.param .u64 rescale_weight_param_0, \n \
+	.param .u64 rescale_weight_param_1 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<3>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<7>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd2, [rescale_weight_param_0]; \n \
+	ld.param.u64 	%rd3, [rescale_weight_param_1]; \n \
+	cvta.to.global.u64 	%rd4, %rd3; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvta.to.global.u64 	%rd5, %rd2; \n \
+	mul.wide.s32 	%rd6, %r4, 4; \n \
+	add.s64 	%rd1, %rd5, %rd6; \n \
+	setp.ge.u64	%p1, %rd1, %rd4; \n \
+	@%p1 bra 	BB24_2; \n \
+ \n \
+	ld.global.f32 	%f1, [%rd1]; \n \
+	fma.rn.ftz.f32 	%f2, %f1, 0f40000000, 0fBF800000; \n \
+	st.global.f32 	[%rd1], %f2; \n \
+ \n \
+BB24_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	fill \n \
+.visible .entry fill( \n \
+	.param .u64 fill_param_0, \n \
+	.param .u64 fill_param_1, \n \
+	.param .f32 fill_param_2 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<2>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<7>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd2, [fill_param_0]; \n \
+	ld.param.u64 	%rd3, [fill_param_1]; \n \
+	ld.param.f32 	%f1, [fill_param_2]; \n \
+	cvta.to.global.u64 	%rd4, %rd3; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvta.to.global.u64 	%rd5, %rd2; \n \
+	mul.wide.s32 	%rd6, %r4, 4; \n \
+	add.s64 	%rd1, %rd5, %rd6; \n \
+	setp.ge.u64	%p1, %rd1, %rd4; \n \
+	@%p1 bra 	BB25_2; \n \
+ \n \
+	st.global.f32 	[%rd1], %f1; \n \
+ \n \
+BB25_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	a_minus_b_to_c \n \
+.visible .entry a_minus_b_to_c( \n \
+	.param .u64 a_minus_b_to_c_param_0, \n \
+	.param .u64 a_minus_b_to_c_param_1, \n \
+	.param .u64 a_minus_b_to_c_param_2, \n \
+	.param .u64 a_minus_b_to_c_param_3 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<4>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<16>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd5, [a_minus_b_to_c_param_0]; \n \
+	ld.param.u64 	%rd6, [a_minus_b_to_c_param_1]; \n \
+	ld.param.u64 	%rd3, [a_minus_b_to_c_param_2]; \n \
+	ld.param.u64 	%rd4, [a_minus_b_to_c_param_3]; \n \
+	cvta.to.global.u64 	%rd7, %rd6; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd5; \n \
+	mul.wide.s32 	%rd8, %r4, 4; \n \
+	add.s64 	%rd9, %rd2, %rd8; \n \
+	setp.ge.u64	%p1, %rd9, %rd7; \n \
+	@%p1 bra 	BB26_2; \n \
+ \n \
+	shl.b64 	%rd10, %rd1, 2; \n \
+	add.s64 	%rd11, %rd2, %rd10; \n \
+	cvta.to.global.u64 	%rd12, %rd3; \n \
+	add.s64 	%rd13, %rd12, %rd10; \n \
+	ld.global.f32 	%f1, [%rd13]; \n \
+	ld.global.f32 	%f2, [%rd11]; \n \
+	sub.ftz.f32 	%f3, %f2, %f1; \n \
+	cvta.to.global.u64 	%rd14, %rd4; \n \
+	add.s64 	%rd15, %rd14, %rd10; \n \
+	st.global.f32 	[%rd15], %f3; \n \
+ \n \
+BB26_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	elementwise_product_ab_c \n \
+.visible .entry elementwise_product_ab_c( \n \
+	.param .u64 elementwise_product_ab_c_param_0, \n \
+	.param .u64 elementwise_product_ab_c_param_1, \n \
+	.param .u64 elementwise_product_ab_c_param_2, \n \
+	.param .u64 elementwise_product_ab_c_param_3 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<4>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<16>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd5, [elementwise_product_ab_c_param_0]; \n \
+	ld.param.u64 	%rd6, [elementwise_product_ab_c_param_1]; \n \
+	ld.param.u64 	%rd3, [elementwise_product_ab_c_param_2]; \n \
+	ld.param.u64 	%rd4, [elementwise_product_ab_c_param_3]; \n \
+	cvta.to.global.u64 	%rd7, %rd6; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd5; \n \
+	mul.wide.s32 	%rd8, %r4, 4; \n \
+	add.s64 	%rd9, %rd2, %rd8; \n \
+	setp.ge.u64	%p1, %rd9, %rd7; \n \
+	@%p1 bra 	BB27_2; \n \
+ \n \
+	shl.b64 	%rd10, %rd1, 2; \n \
+	add.s64 	%rd11, %rd2, %rd10; \n \
+	cvta.to.global.u64 	%rd12, %rd3; \n \
+	add.s64 	%rd13, %rd12, %rd10; \n \
+	ld.global.f32 	%f1, [%rd13]; \n \
+	ld.global.f32 	%f2, [%rd11]; \n \
+	mul.ftz.f32 	%f3, %f2, %f1; \n \
+	cvta.to.global.u64 	%rd14, %rd4; \n \
+	add.s64 	%rd15, %rd14, %rd10; \n \
+	st.global.f32 	[%rd15], %f3; \n \
+ \n \
+BB27_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	update_weight \n \
+.visible .entry update_weight( \n \
+	.param .u64 update_weight_param_0, \n \
+	.param .u64 update_weight_param_1, \n \
+	.param .u64 update_weight_param_2, \n \
+	.param .f32 update_weight_param_3 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<6>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [update_weight_param_0]; \n \
+	ld.param.u64 	%rd5, [update_weight_param_1]; \n \
+	ld.param.u64 	%rd3, [update_weight_param_2]; \n \
+	ld.param.f32 	%f1, [update_weight_param_3]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB28_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	ld.global.f32 	%f2, [%rd12]; \n \
+	mul.ftz.f32 	%f3, %f2, %f1; \n \
+	ld.global.f32 	%f4, [%rd10]; \n \
+	sub.ftz.f32 	%f5, %f4, %f3; \n \
+	st.global.f32 	[%rd10], %f5; \n \
+ \n \
+BB28_2: \n \
+	ret; \n \
+} \n \
+ \n \
+	// .globl	steepest_descent_weight \n \
+.visible .entry steepest_descent_weight( \n \
+	.param .u64 steepest_descent_weight_param_0, \n \
+	.param .u64 steepest_descent_weight_param_1, \n \
+	.param .u64 steepest_descent_weight_param_2, \n \
+	.param .f32 steepest_descent_weight_param_3, \n \
+	.param .f32 steepest_descent_weight_param_4 \n \
+) \n \
+.maxntid 128, 1, 1 \n \
+{ \n \
+	.reg .pred 	%p<2>; \n \
+	.reg .f32 	%f<10>; \n \
+	.reg .b32 	%r<5>; \n \
+	.reg .b64 	%rd<13>; \n \
+ \n \
+ \n \
+	ld.param.u64 	%rd4, [steepest_descent_weight_param_0]; \n \
+	ld.param.u64 	%rd5, [steepest_descent_weight_param_1]; \n \
+	ld.param.u64 	%rd3, [steepest_descent_weight_param_2]; \n \
+	ld.param.f32 	%f1, [steepest_descent_weight_param_3]; \n \
+	ld.param.f32 	%f2, [steepest_descent_weight_param_4]; \n \
+	cvta.to.global.u64 	%rd6, %rd5; \n \
+	mov.u32 	%r1, %ctaid.x; \n \
+	mov.u32 	%r2, %ntid.x; \n \
+	mov.u32 	%r3, %tid.x; \n \
+	mad.lo.s32 	%r4, %r1, %r2, %r3; \n \
+	cvt.s64.s32	%rd1, %r4; \n \
+	cvta.to.global.u64 	%rd2, %rd4; \n \
+	mul.wide.s32 	%rd7, %r4, 4; \n \
+	add.s64 	%rd8, %rd2, %rd7; \n \
+	setp.ge.u64	%p1, %rd8, %rd6; \n \
+	@%p1 bra 	BB29_2; \n \
+ \n \
+	shl.b64 	%rd9, %rd1, 2; \n \
+	add.s64 	%rd10, %rd2, %rd9; \n \
+	cvta.to.global.u64 	%rd11, %rd3; \n \
+	mul.ftz.f32 	%f3, %f1, 0fC0000000; \n \
+	fma.rn.ftz.f32 	%f4, %f3, %f2, 0f3F800000; \n \
+	ld.global.f32 	%f5, [%rd10]; \n \
+	mul.ftz.f32 	%f6, %f4, %f5; \n \
+	add.s64 	%rd12, %rd11, %rd9; \n \
+	ld.global.f32 	%f7, [%rd12]; \n \
+	mul.ftz.f32 	%f8, %f7, %f1; \n \
+	sub.ftz.f32 	%f9, %f6, %f8; \n \
+	st.global.f32 	[%rd10], %f9; \n \
+ \n \
+BB29_2: \n \
+	ret; \n \
+}";
+
