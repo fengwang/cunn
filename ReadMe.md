@@ -1,4 +1,4 @@
-## CUNN -- Deep neural network with multi-GPU support writtend in a minimal fashion
+## CUNN -- Deep neural network with multi-GPU support designed in a minimal fashion
 
 #### Typical usage:
 
