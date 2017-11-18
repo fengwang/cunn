@@ -1,28 +1,32 @@
-## CUNN -- Deep neural network with multi-GPU support designed in a minimal fashion
+## CUNN
+Deep neural network with multi-GPU support writtend in a minimal fashion
 
 #### Typical usage:
 
 ```cpp
-    std::vector<unsigned long> dim{ 2, 20, 20, 1 };
+// topology of the neural network
+std::vector<unsigned long> dim{ 2, 20, 20, 1 };
 
-	// construct NN
-    auto nn = make_nn( dim );
+// construction
+auto nn = make_nn( dim );
 
-	// train NN
-	unsigned long const epoch = 1024;
-    train( nn, "input.txt", "output.txt", epoch );
+// train NN
+unsigned long const epoch = 1024;
+train( nn, "input.txt", "output.txt", epoch );
+// or
+//train( nn, input_matrix, output_matrix, epoch );
 
-	// Validate
-    double res = validate( nn, "in.txt", "out.txt" );
+// validate
+double res = validate( nn, "in.txt", "out.txt" );
 
-    // Predict
-    auto out = predict( nn, "input.txt" );
+// predict
+auto out = predict( nn, "input.txt" );
 
-	// save NN
-    nn.save_as("xor.nn");
+// save NN
+nn.save_as("xor.nn");
 
-	// load NN
-    auto nm = load_nn("xor.nn");
+// load NN
+auto nm = load_nn("xor.nn");
 ```
 
 #### Typical compilation and link command (MAC OS X) :
